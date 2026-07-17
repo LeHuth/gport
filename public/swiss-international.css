@@ -1,0 +1,279 @@
+/* Swiss International Design System — standalone stylesheet.
+ * Single-file build of the full token set: fonts, colors, typography,
+ * spacing, layout, semantic base + reset. Link this one file in your project:
+ *   <link rel="stylesheet" href="swiss-international.css">
+ * Dark mode: add class "theme-dark" to any container (or <body>). */
+
+/* Swiss International — Type
+ * The canonical Swiss International Typographic Style face is Neue Haas Grotesk /
+ * Helvetica / Akzidenz-Grotesk (all licensed). We ship Archivo, a neo-grotesque
+ * with a wide weight range that reads closest to that lineage, and fall back to
+ * the native Helvetica/Arial stack. Swap in a licensed grotesque if you have one.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Archivo+Narrow:wght@400;500;600;700&display=swap");
+
+/* Swiss International — Color
+ * A restrained, high-contrast palette: paper white, ink black, one signal red.
+ * Blue and yellow are the classic Swiss-poster secondary primaries, used sparingly.
+ * Semantic aliases are theme-scoped in base.css (light :root default, dark scope). */
+:root {
+  /* Base neutrals — cool, near-achromatic */
+  --white: #ffffff;
+  --paper: #f7f6f3;      /* warm off-white "paper" */
+  --gray-50: #f2f1ee;
+  --gray-100: #e8e7e3;
+  --gray-200: #d7d6d1;
+  --gray-300: #bcbbb5;
+  --gray-400: #97968f;
+  --gray-500: #6d6c66;
+  --gray-600: #4c4b46;
+  --gray-700: #333230;
+  --gray-800: #1b1b1a;
+  --gray-900: #101010;
+  --ink: #0d0d0d;
+  --black: #000000;
+
+  /* Signal red — the one true Swiss accent */
+  --red: #e4002b;
+  --red-hover: #c40025;
+  --red-press: #a4001f;
+  --red-tint: #fbe5ea;
+
+  /* Secondary primaries (posters, data, rare accents) */
+  --blue: #0b3dff;
+  --blue-hover: #082fcc;
+  --yellow: #ffd400;
+  --yellow-ink: #1b1b1a;   /* text/ink sitting on yellow */
+
+  /* Fixed-hue status */
+  --green: #067647;
+  --amber: #b45309;
+}
+
+/* Swiss International — Typography
+ * Grotesque only. Tight leading on display, generous on body. Flush-left,
+ * ragged-right is the default setting; uppercase labels carry wide tracking. */
+:root {
+  --font-grotesk: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-narrow: "Archivo Narrow", "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Weights */
+  --fw-light: 300; /* @kind font */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+  --fw-black: 900; /* @kind font */
+
+  /* Type scale — 1.5 → strong editorial hierarchy (px for predictability) */
+  --fs-display: 96px;
+  --fs-h1: 64px;
+  --fs-h2: 44px;
+  --fs-h3: 30px;
+  --fs-h4: 22px;
+  --fs-body-lg: 19px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+  --fs-caption: 12px;
+  --fs-micro: 10.5px;
+
+  /* Line heights */
+  --lh-tight: 0.95; /* @kind font */
+  --lh-snug: 1.05; /* @kind font */
+  --lh-heading: 1.12; /* @kind font */
+  --lh-body: 1.55; /* @kind font */
+  --lh-relaxed: 1.7; /* @kind font */
+
+  /* Tracking */
+  --tracking-display: -0.02em; /* @kind font */
+  --tracking-tight: -0.01em; /* @kind font */
+  --tracking-normal: 0; /* @kind font */
+  --tracking-label: 0.14em; /* @kind font */
+  --tracking-wide: 0.22em; /* @kind font */
+
+  /* Semantic role aliases */
+  --text-display: var(--fw-black) var(--fs-display)/var(--lh-tight) var(--font-grotesk);
+  --text-h1: var(--fw-bold) var(--fs-h1)/var(--lh-snug) var(--font-grotesk);
+  --text-h2: var(--fw-bold) var(--fs-h2)/var(--lh-heading) var(--font-grotesk);
+  --text-h3: var(--fw-semibold) var(--fs-h3)/var(--lh-heading) var(--font-grotesk);
+  --text-body-lg: var(--fw-regular) var(--fs-body-lg)/var(--lh-body) var(--font-grotesk);
+  --text-body: var(--fw-regular) var(--fs-body)/var(--lh-body) var(--font-grotesk);
+  --text-small: var(--fw-regular) var(--fs-small)/var(--lh-body) var(--font-grotesk);
+  --text-label: var(--fw-semibold) var(--fs-caption)/1 var(--font-grotesk);
+}
+
+/* Swiss International — Spacing
+ * An 8px baseline grid. Everything snaps to it. Named steps for use in tokens
+ * and components; raw --grid-unit for math. */
+:root {
+  --grid-unit: 8px;
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 160px;
+  --space-12: 224px;
+
+  /* Component-scale spacing */
+  --pad-control: 12px 20px;   /* buttons / inputs */
+  --pad-card: 32px;
+  --gap-inline: 12px;
+  --gap-stack: 16px;
+}
+
+/* Swiss International — Layout, radii, borders, elevation, motion
+ * The Swiss grid is the primary organising device. Corners are square. Structure
+ * is expressed with hairline rules, not shadows — elevation is used sparingly. */
+:root {
+  /* Grid */
+  --grid-columns: 12; /* @kind other */
+  --grid-gutter: 24px;
+  --content-max: 1280px;
+  --measure: 66ch; /* @kind other */ /* optimal reading width */
+
+  /* Radii — Swiss is square. Small radius reserved for a rare soft affordance. */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 999px;
+
+  /* Borders — hairline rules do the structural work */
+  --border-hair: 1px;
+  --border-rule: 2px;
+  --border-heavy: 4px;
+
+  /* Elevation — flat by default; these are for overlays only */
+  --shadow-none: none;
+  --shadow-overlay: 0 2px 0 rgba(13,13,13,0.04), 0 12px 32px rgba(13,13,13,0.14);
+  --shadow-popover: 0 8px 24px rgba(13,13,13,0.16);
+
+  /* Motion — objective, quick, no bounce */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --dur-fast: 120ms; /* @kind other */
+  --dur-base: 180ms; /* @kind other */
+  --dur-slow: 280ms; /* @kind other */
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--blue);
+  --z-overlay: 1000; /* @kind other */
+  --z-toast: 1100; /* @kind other */
+}
+
+/* Swiss International — Base
+ * Semantic theme aliases (light default + dark scope), reset, element defaults.
+ * Consumers get flat, high-contrast, grid-aligned defaults out of the box. */
+
+/* ---- Semantic tokens: LIGHT (default) ---- */
+:root {
+  color-scheme: light;
+  --bg: var(--paper);
+  --bg-inset: var(--gray-50);
+  --surface: var(--white);
+  --surface-2: var(--gray-50);
+  --surface-inverse: var(--ink);
+
+  --text: var(--ink);
+  --text-muted: var(--gray-500);
+  --text-subtle: var(--gray-400);
+  --text-inverse: var(--white);
+  --text-on-accent: var(--white);
+
+  --border: var(--gray-200);
+  --border-strong: var(--ink);
+  --border-muted: var(--gray-100);
+
+  --accent: var(--red);
+  --accent-hover: var(--red-hover);
+  --accent-press: var(--red-press);
+  --accent-tint: var(--red-tint);
+
+  --link: var(--red);
+  --link-hover: var(--red-hover);
+
+  --field-bg: var(--white);
+  --field-border: var(--gray-300);
+  --overlay-scrim: rgba(13,13,13,0.42);
+
+  --status-success: var(--green);
+  --status-warning: var(--amber);
+  --status-danger: var(--red);
+  --status-info: var(--blue);
+}
+
+/* ---- Semantic tokens: DARK ---- */
+:root[data-theme="dark"], .theme-dark {
+  color-scheme: dark;
+  --bg: #0b0b0b;
+  --bg-inset: #050505;
+  --surface: #151514;
+  --surface-2: #1d1d1c;
+  --surface-inverse: var(--paper);
+
+  --text: #f3f2ee;
+  --text-muted: #a09f98;
+  --text-subtle: #6d6c66;
+  --text-inverse: var(--ink);
+  --text-on-accent: #ffffff;
+
+  --border: #2a2a28;
+  --border-strong: #f3f2ee;
+  --border-muted: #1f1f1e;
+
+  --accent: #ff2b41;
+  --accent-hover: #ff4a5c;
+  --accent-press: #e11330;
+  --accent-tint: #2a0f13;
+
+  --link: #ff5566;
+  --link-hover: #ff7d8a;
+
+  --field-bg: #121211;
+  --field-border: #3a3a37;
+  --overlay-scrim: rgba(0,0,0,0.66);
+
+  --shadow-overlay: 0 2px 0 rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.55);
+  --shadow-popover: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: var(--text-body);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg, video { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-grotesk); font-weight: var(--fw-bold); line-height: var(--lh-heading); letter-spacing: var(--tracking-tight); text-wrap: balance; }
+p { text-wrap: pretty; }
+
+a { color: var(--link); text-decoration: none; text-underline-offset: 3px; text-decoration-thickness: 1px; transition: color var(--dur-fast) var(--ease-standard); }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+::selection { background: var(--accent); color: var(--text-on-accent); }
+
+/* Uppercase tracked label — a Swiss staple */
+.eyebrow, .label-kicker {
+  font: var(--fw-semibold) var(--fs-caption)/1 var(--font-grotesk);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--text-muted);
+}
+
+/* A hairline rule spanning its container */
+.rule { border: 0; border-top: var(--border-rule) solid var(--border-strong); }
+

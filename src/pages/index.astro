@@ -1,4 +1,8 @@
 ---
+import MenuBar from "../components/MenuBar.vue";
+import Popover from "../components/Popover.vue"
+import RekaMenuBar from '../components/RekaUI/RekaMenuBar.vue';
+import RekaSlider from '../components/RekaUI/RekaSlider.vue';
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
@@ -6,6 +10,7 @@ import Layout from '../layouts/Layout.astro';
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout client:visible>
+	<MenuBar />
+	<h1>Hello World</h1>
 </Layout>
