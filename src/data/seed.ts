@@ -219,5 +219,46 @@ export const seedContent: PortfolioContent = {
     },
   ],
 
+  // Add, remove or reorder `items` freely — the grid renders whatever is here,
+  // and the whole section disappears when the list is empty.
+  sideProjects: {
+    heading: { de: 'Nebenprojekte', en: 'Side Projects' },
+    tagline: { de: 'Musikvideos · Studentenfilme', en: 'Music Videos · Student Films' },
+    items: [
+      {
+        id: 'musikvideo-1',
+        title: 'Musikvideo — Titel folgt',
+        kind: { de: 'Musikvideo', en: 'Music video' },
+        meta: { de: 'Artist · Jahr', en: 'Artist · year' },
+        embed: null,
+        url: null,
+      },
+      {
+        id: 'musikvideo-2',
+        title: 'Musikvideo — Titel folgt',
+        kind: { de: 'Musikvideo', en: 'Music video' },
+        meta: { de: 'Artist · Jahr', en: 'Artist · year' },
+        embed: null,
+        url: null,
+      },
+      {
+        id: 'studentenfilm-1',
+        title: 'Studentenfilm — Titel folgt',
+        kind: { de: 'Studentenfilm', en: 'Student film' },
+        meta: { de: 'Kurzfilm · Jahr', en: 'Short film · year' },
+        embed: null,
+        url: null,
+      },
+      {
+        id: 'studentenfilm-2',
+        title: 'Studentenfilm — Titel folgt',
+        kind: { de: 'Studentenfilm', en: 'Student film' },
+        meta: { de: 'Kurzfilm · Jahr', en: 'Short film · year' },
+        embed: null,
+        url: null,
+      },
+    ],
+  },
+
   broadcasters: ['Arte', 'ZDF', 'Terra X', '3sat', 'Tracks', 'Mercedes'],
 }

@@ -16,6 +16,7 @@ import HeroSection from './HeroSection.vue'
 import StatsBar from './StatsBar.vue'
 import WorkSection from './WorkSection.vue'
 import ReelSection from './ReelSection.vue'
+import SideProjectsSection from './SideProjectsSection.vue'
 import AboutSection from './AboutSection.vue'
 import ClientsSection from './ClientsSection.vue'
 import ContactSection from './ContactSection.vue'
@@ -25,6 +26,10 @@ const content = computed(() => portfolio.content)
 const profile = computed(() => content.value.profile)
 const footerNotice = computed(() => `© 2026 ${profile.value.name} — Editor, Berlin`)
 
+// Side projects are optional content — no entries means no section and no nav link.
+const sideProjects = computed(() => content.value.sideProjects)
+const hasSideProjects = computed(() => sideProjects.value.items.length > 0)
+
 onMounted(() => {
   initUi()
   loadPortfolio()
@@ -33,7 +38,10 @@ onMounted(() => {
 
 <template>
   <div id="gb" class="gb" :class="{ 'theme-dark': ui.theme === 'dark' }">
-    <SiteHeader :name="profile.name" />
+    <SiteHeader
+      :name="profile.name"
+      :side-projects-label="hasSideProjects ? sideProjects.heading : null"
+    />
 
     <a id="top" />
 
@@ -45,6 +53,7 @@ onMounted(() => {
     />
     <WorkSection :projects="content.projects" />
     <ReelSection :reel="profile.reel" />
+    <SideProjectsSection v-if="hasSideProjects" :content="sideProjects" />
     <AboutSection :about="profile.about" />
     <ClientsSection :broadcasters="content.broadcasters" />
     <ContactSection

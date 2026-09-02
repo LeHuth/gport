@@ -3,17 +3,29 @@
 import { Icon } from '@iconify/vue'
 import type { Localized } from '../../lib/types'
 import { ui, setLang, toggleTheme } from '../../stores/ui'
+import { computed } from 'vue'
 import Container from './Container.vue'
 import LangText from './LangText.vue'
 
-defineProps<{ name: string }>()
+const props = withDefaults(
+  defineProps<{ name: string; sideProjectsLabel?: Localized | null }>(),
+  { sideProjectsLabel: null },
+)
 
-const nav: { href: string; label: Localized }[] = [
+interface NavItem {
+  href: string
+  label: Localized
+}
+
+// #side is only linked when the section actually renders, so the nav never
+// points at a missing anchor.
+const nav = computed<NavItem[]>(() => [
   { href: '#work', label: { de: 'Referenzen', en: 'Work' } },
   { href: '#reel', label: { de: 'Showreel', en: 'Showreel' } },
+  ...(props.sideProjectsLabel ? [{ href: '#side', label: props.sideProjectsLabel }] : []),
   { href: '#about', label: { de: 'Über', en: 'About' } },
   { href: '#contact', label: { de: 'Kontakt', en: 'Contact' } },
-]
+])
 </script>
 
 <template>

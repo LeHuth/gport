@@ -19,12 +19,19 @@
  *   about_paragraphs (json: [{de,en}, ...]),
  *   skills (json: [{de,en}, ...]),
  *   email (text), socials (json: [{label,handle,url}, ...]),
- *   location (text), cv (file, single), reel_year (text), reel_embed (url|text)
+ *   location (text), cv (file, single), reel_year (text), reel_embed (url|text),
+ *   side_heading_de, side_heading_en, side_tagline_de, side_tagline_en
  *
  * collection `projects` (one record per project), with an `order` number field:
  *   title, sender, year, format_de, format_en, description_de, description_en,
  *   role_de, role_en, embed (url|text), still (file, single),
  *   still_hint (text), links (json: [{label,url}, ...])
+ *
+ * collection `side_projects` (one record per card), with an `order` number field:
+ *   title, kind_de, kind_en, meta_de, meta_en, embed (url|text),
+ *   still (file, single), still_hint (text), url (url|text)
+ *   Add as many records as you like — the grid grows to fit, and an empty
+ *   collection hides the whole section.
  *
  * collection `broadcasters` (one record per logo), with an `order` number field:
  *   name (text)
@@ -36,6 +43,8 @@ import type {
   PortfolioContent,
   Profile,
   Project,
+  SideProject,
+  SideProjectsContent,
   SocialLink,
 } from './types'
 
@@ -71,11 +80,24 @@ async function pbList(collection: string, sort?: string): Promise<PbRecord[]> {
   return body.items
 }
 
+/**
+ * Like `pbList`, but treats a missing collection as empty rather than an error —
+ * so an instance that predates an optional section still loads.
+ */
+async function pbListOptional(collection: string, sort?: string): Promise<PbRecord[]> {
+  try {
+    return await pbList(collection, sort)
+  } catch {
+    return []
+  }
+}
+
 /** Fetch and map the full portfolio from PocketBase into the UI view model. */
 export async function fetchPortfolioFromPocketBase(): Promise<PortfolioContent> {
-  const [profiles, projects, broadcasters] = await Promise.all([
+  const [profiles, projects, sideProjects, broadcasters] = await Promise.all([
     pbList('profile'),
     pbList('projects', 'order'),
+    pbListOptional('side_projects', 'order'),
     pbList('broadcasters', 'order'),
   ])
 
@@ -85,6 +107,7 @@ export async function fetchPortfolioFromPocketBase(): Promise<PortfolioContent> 
   return {
     profile: mapProfile(profileRec),
     projects: projects.map(mapProject),
+    sideProjects: mapSideProjects(profileRec, sideProjects),
     broadcasters: broadcasters.map((r) => str(r.name)),
   }
 }
@@ -135,11 +158,46 @@ function mapProject(r: PbRecord): Project {
   }
 }
 
+/** Headings live on the `profile` record; the cards are their own collection. */
+function mapSideProjects(profileRec: PbRecord, records: PbRecord[]): SideProjectsContent {
+  return {
+    heading: localizedOr(profileRec, 'side_heading', SIDE_DEFAULTS.heading),
+    tagline: localizedOr(profileRec, 'side_tagline', SIDE_DEFAULTS.tagline),
+    items: records.map(mapSideProject),
+  }
+}
+
+function mapSideProject(r: PbRecord): SideProject {
+  const stillFile = str(r.still)
+  return {
+    id: r.id,
+    title: str(r.title),
+    kind: localized(r, 'kind'),
+    meta: localized(r, 'meta'),
+    embed: strOrNull(r.embed),
+    still: stillFile ? pbFileUrl(r, stillFile) : null,
+    stillHint: str(r.still_hint) || undefined,
+    url: strOrNull(r.url),
+  }
+}
+
+/** Used when the `profile` record has no side-project heading fields yet. */
+const SIDE_DEFAULTS = {
+  heading: { de: 'Nebenprojekte', en: 'Side Projects' },
+  tagline: { de: 'Musikvideos · Studentenfilme', en: 'Music Videos · Student Films' },
+} satisfies Record<string, Localized>
+
 // ── field helpers ─────────────────────────────────────────────────────────────
 
 /** Read `<base>_de` / `<base>_en` fields into a Localized pair. */
 function localized(r: PbRecord, base: string): Localized {
   return { de: str(r[`${base}_de`]), en: str(r[`${base}_en`]) }
+}
+
+/** As `localized`, but falls back per-language when the field is blank/absent. */
+function localizedOr(r: PbRecord, base: string, fallback: Localized): Localized {
+  const value = localized(r, base)
+  return { de: value.de || fallback.de, en: value.en || fallback.en }
 }
 
 function str(value: unknown): string {

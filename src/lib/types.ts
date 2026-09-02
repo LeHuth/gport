@@ -41,6 +41,43 @@ export interface Project {
   links: ProjectLink[]
 }
 
+/**
+ * One card in the Side Projects grid.
+ *
+ * Deliberately looser than `Project`: no accordion, no per-item link list —
+ * just a still or embed, a kind, a title and one optional "watch" link. The
+ * grid takes any number of these, so entries can be added or removed freely.
+ */
+export interface SideProject {
+  /** Stable id — used as the list key. */
+  id: string
+  title: string
+  /** What sort of piece it is, e.g. "Musikvideo" / "Music video". */
+  kind: Localized
+  /** Secondary line, e.g. "Artist · Jahr". */
+  meta: Localized
+  /** Embeddable player URL. Null → show a still instead. */
+  embed?: string | null
+  /** Still image URL shown when there is no embed. Null → placeholder box. */
+  still?: string | null
+  /** Placeholder hint shown when neither embed nor still is set. */
+  stillHint?: string
+  /** Optional external link rendered as "Ansehen ↗". */
+  url?: string | null
+}
+
+/**
+ * The Side Projects section as a whole. Both the heading and the tagline that
+ * names what the side work actually is ("Musikvideos · Studentenfilme") are
+ * content, not markup, so they can be edited without touching the component.
+ */
+export interface SideProjectsContent {
+  heading: Localized
+  /** Eyebrow beside the heading describing the kinds of work shown. */
+  tagline: Localized
+  items: SideProject[]
+}
+
 export interface SocialLink {
   label: string
   handle: string
@@ -80,5 +117,7 @@ export interface Profile {
 export interface PortfolioContent {
   profile: Profile
   projects: Project[]
+  /** Section is hidden entirely when `items` is empty. */
+  sideProjects: SideProjectsContent
   broadcasters: string[]
 }
